@@ -1,13 +1,15 @@
 import { execFile } from "child_process";
 import { promisify } from "util";
-import { showToast, Toast, closeMainWindow } from "@raycast/api";
-import path from "path";
+import { environment, showToast, Toast, closeMainWindow } from "@raycast/api";
+import { join } from "path";
+import { chmodSync } from "fs";
 
 const execFileAsync = promisify(execFile);
 
 export default async function Command(props: { arguments: { text: string } }) {
   const text = props.arguments.text;
-  const swiftScriptPath = path.join(__dirname, "assets", "fullscreen_text.swift");
+  const swiftScriptPath = join(environment.assetsPath, "fullscreen_text.swift");
+  chmodSync(swiftScriptPath, 0o755);
 
   closeMainWindow({ clearRootSearch: true });
 
